@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Energy Trading DApp</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>⚡ Energy Trading DApp</h1>
+
+    <button id="connectWallet">Connect MetaMask</button>
+    <p id="walletAddress">Not connected</p>
+
+    <div class="form-section">
+      <h2>Submit Energy Offer</h2>
+      <input type="number" id="energyAmount" placeholder="Energy in kWh" />
+      <input type="number" id="pricePerUnit" placeholder="Price per kWh (ETH)" />
+      <button id="submitOffer">Submit Offer</button>
+    </div>
+
+    <div class="market-section">
+      <h2>Market Price</h2>
+      <p id="marketPrice">Loading...</p>
+    </div>
+
+    <div class="history-section">
+      <h2>Trade History</h2>
+      <ul id="tradeHistory"></ul>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

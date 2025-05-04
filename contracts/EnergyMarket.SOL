@@ -1,0 +1,37 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract EnergyMarket {
+    struct Offer {
+        address seller;
+        uint256 energy;      // in kWh
+        uint256 pricePerKWh; // in wei
+        bool active;
+    }
+
+    Offer[] public offers;
+
+    event OfferCreated(uint256 indexed offerId, address indexed seller, uint256 energy, uint256 pricePerKWh);
+    event OfferAccepted(uint256 indexed offerId, address indexed buyer, uint256 totalPrice);
+
+    function createOffer(uint256 energy, uint256 pricePerKWh) external {
+        offers.push(Offer(msg.sender, energy, pricePerKWh, true));
+        emit OfferCreated(offers.length - 1, msg.sender, energy, pricePerKWh);
+    }
+
+    function acceptOffer(uint256 offerId) external payable {
+        Offer storage offer = offers[offerId];
+        require(offer.active, "Offer not active");
+        uint256 totalPrice = offer.energy * offer.pricePerKWh;
+        require(msg.value >= totalPrice, "Insufficient payment");
+
+        offer.active = false;
+        payable(offer.seller).transfer(totalPrice);
+
+        emit OfferAccepted(offerId, msg.sender, totalPrice);
+    }
+
+    function getOffers() external view returns (Offer[] memory) {
+        return offers;
+    }
+}
