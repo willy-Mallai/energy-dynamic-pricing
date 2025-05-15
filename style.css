@@ -1,41 +1,99 @@
-body {
-    font-family: Arial, sans-serif;
-    background: #f3f3f3;
-    color: #333;
-    padding: 20px;
-  }
-  
-  .container {
-    max-width: 600px;
-    margin: auto;
-    background: #fff;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.1);
-  }
-  
-  h1, h2 {
-    color: #0070f3;
-  }
-  
-  input {
-    width: 100%;
-    padding: 10px;
-    margin: 5px 0 15px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-  }
-  
-  button {
-    padding: 10px 15px;
-    background-color: #0070f3;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #005bb5;
-  }
-  
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.app-background {
+  background: linear-gradient(135deg, #74ebd5, #9face6);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+}
+
+.container {
+  max-width: 600px;
+  width: 100%;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  color: #fff;
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 20px;
+  font-size: 32px;
+}
+
+button {
+  background-color: #ffffff20;
+  border: none;
+  color: white;
+  padding: 12px 20px;
+  margin-top: 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: #ffffff40;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+.card {
+  background-color: rgba(255, 255, 255, 0.12);
+  padding: 20px;
+  border-radius: 15px;
+  margin-top: 20px;
+  text-align: left;
+}
+
+.wallet-info {
+  font-style: italic;
+  margin-top: 10px;
+  color: #eee;
+}
+
+#offerStatus {
+  margin-top: 10px;
+  font-weight: bold;
+  color: #aaffaa;
+}
+
+.history-list {
+  max-height: 150px;
+  overflow-y: auto;
+  list-style: none;
+  padding-left: 0;
+}
+
+.history-list li {
+  padding: 10px;
+  background-color: rgba(255,255,255,0.1);
+  margin-bottom: 10px;
+  border-radius: 8px;
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

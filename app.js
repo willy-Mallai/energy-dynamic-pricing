@@ -1,49 +1,55 @@
+import { uploadToIPFS } from './ipfs.js';
+
 let userAccount;
 
 window.addEventListener('DOMContentLoaded', () => {
   const connectButton = document.getElementById('connectWallet');
   const walletAddress = document.getElementById('walletAddress');
-  const submitOffer = document.getElementById('submitOffer');
 
-  // Check for MetaMask
   if (typeof window.ethereum === 'undefined') {
     alert('MetaMask is not installed!');
     return;
   }
 
-  // Connect to MetaMask
   connectButton.addEventListener('click', async () => {
     try {
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
       userAccount = accounts[0];
       walletAddress.innerText = `Connected: ${userAccount}`;
     } catch (err) {
-      console.error('User denied account access', err);
+      console.error('Wallet connection failed', err);
+      walletAddress.innerText = ' Wallet connection failed';
     }
   });
 
-  // Handle Offer Submission
-  submitOffer.addEventListener('click', () => {
+  // 👇 This is your existing offer submission logic
+  const submitOffer = document.getElementById('submitOffer');
+
+  submitOffer.addEventListener('click', async () => {
     const energy = document.getElementById('energyAmount').value;
     const price = document.getElementById('pricePerUnit').value;
+    const status = document.getElementById('offerStatus');
 
     if (!userAccount) {
-      alert('Please connect MetaMask first.');
+      status.innerText = "Please connect MetaMask first.";
       return;
     }
 
     if (!energy || !price) {
-      alert('Please enter energy amount and price.');
+      status.innerText = " Missing values!";
       return;
     }
 
-    console.log(`Submitting offer: ${energy} kWh @ ${price} ETH/kWh`);
+    const tradeData = {
+      energy,
+      price,
+      timestamp: new Date().toISOString(),
+      user: userAccount,
+    };
 
-    // 🔧 This is where you'll call the smart contract method later
-    // For now, just simulate
-    alert(`Offer submitted: ${energy} kWh @ ${price} ETH/kWh`);
+    status.innerText = " Uploading to IPFS...";
+    const ipfsHash = await uploadToIPFS(tradeData);
+
+    status.innerText = `Stored on IPFS: ${ipfsHash}`;
   });
-
-  // Set placeholder for market price
-  document.getElementById('marketPrice').innerText = '0.08 ETH/kWh (example)';
 });

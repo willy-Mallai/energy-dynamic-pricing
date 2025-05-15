@@ -2,36 +2,35 @@
 pragma solidity ^0.8.20;
 
 contract EnergyMarket {
-    struct Offer {
-        address seller;
-        uint256 energy;      // in kWh
-        uint256 pricePerKWh; // in wei
-        bool active;
+    // Struct to store offer metadata (optional)
+    struct Trade {
+        string ipfsHash;
+        uint256 timestamp;
     }
 
-    Offer[] public offers;
+    // Mapping of user to their trade IPFS hashes
+    mapping(address => Trade[]) private trades;
 
-    event OfferCreated(uint256 indexed offerId, address indexed seller, uint256 energy, uint256 pricePerKWh);
-    event OfferAccepted(uint256 indexed offerId, address indexed buyer, uint256 totalPrice);
-
-    function createOffer(uint256 energy, uint256 pricePerKWh) external {
-        offers.push(Offer(msg.sender, energy, pricePerKWh, true));
-        emit OfferCreated(offers.length - 1, msg.sender, energy, pricePerKWh);
+    // Record a trade by IPFS hash
+    function recordTrade(string memory ipfsHash) public {
+        trades[msg.sender].push(Trade(ipfsHash, block.timestamp));
     }
 
-    function acceptOffer(uint256 offerId) external payable {
-        Offer storage offer = offers[offerId];
-        require(offer.active, "Offer not active");
-        uint256 totalPrice = offer.energy * offer.pricePerKWh;
-        require(msg.value >= totalPrice, "Insufficient payment");
+    // Get all trade IPFS hashes for a user
+    function getTradeHashes(address user) public view returns (string[] memory) {
+        uint count = trades[user].length;
+        string[] memory hashes = new string[](count);
 
-        offer.active = false;
-        payable(offer.seller).transfer(totalPrice);
+        for (uint i = 0; i < count; i++) {
+            hashes[i] = trades[user][i].ipfsHash;
+        }
 
-        emit OfferAccepted(offerId, msg.sender, totalPrice);
+        return hashes;
     }
 
-    function getOffers() external view returns (Offer[] memory) {
-        return offers;
+    // Optionally add helper to get full trade with timestamp
+    function getTradeWithTimestamp(address user, uint index) public view returns (string memory, uint256) {
+        Trade memory trade = trades[user][index];
+        return (trade.ipfsHash, trade.timestamp);
     }
 }
